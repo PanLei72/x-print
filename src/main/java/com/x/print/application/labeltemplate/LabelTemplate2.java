@@ -1,8 +1,6 @@
 package com.x.print.application.labeltemplate;
 
 import com.alibaba.fastjson2.JSONObject;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.x.print.application.LabelPrintable;
 import com.x.print.infrastructure.utility.Barcode4jUtility;
 import org.apache.logging.log4j.LogManager;

@@ -1,17 +1,15 @@
 package com.x.print.rest;
 
+import com.alibaba.fastjson2.JSONObject;
 import com.x.print.domain.model.label.ILabelService;
 import com.x.print.domain.model.label.Label;
 import com.x.print.domain.model.printqueue.IPrintQueueService;
-import com.x.print.domain.model.printqueue.PrintQueue;
 import com.x.print.infrastructure.constants.PrintStatus;
-import io.jmix.data.Sequence;
-import io.jmix.data.Sequences;
 import org.apache.groovy.parser.antlr4.util.StringUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.UUID;
 
 /**
  * @author PanLei
@@ -20,6 +18,8 @@ import java.util.UUID;
  */
 @Service("print_PrintService")
 public class PrintService {
+
+    private static final Logger logger = LogManager.getLogger(PrintService.class);
     @Autowired
     private IPrintQueueService printQueueService;
     @Autowired
@@ -27,20 +27,38 @@ public class PrintService {
 
     public PrintResponse printLabel(PrintRequest printRequest) {
         PrintResponse printResponse = new PrintResponse();
+        printResponse.setSuccess(false);
 
         if (printRequest == null) {
-            printResponse.setSuccess(false);
             printResponse.setErrorMessage("参数不能为空");
             return printResponse;
         }
         String labelIdentity = printRequest.getLabelIdentity();
         if (StringUtils.isEmpty(labelIdentity)) {
-            printResponse.setSuccess(false);
-            printResponse.setErrorMessage("labelIdentity不能为空");
+            printResponse.setErrorMessage("标签名称[labelIdentity]不能为空");
             return printResponse;
         }
-
+        String labelName = printRequest.getLabelName();
+        if (StringUtils.isEmpty(labelName)) {
+            printResponse.setErrorMessage("标签名称[labelName]不能为空");
+            return printResponse;
+        }
         String printerName = printRequest.getPrinterName();
+        if (StringUtils.isEmpty(printerName)) {
+            printResponse.setErrorMessage("打印机[printerName]不能为空");
+            return printResponse;
+        }
+        String labelData = printRequest.getLabelData();
+        try {
+            JSONObject.parseObject(labelData);
+        } catch (Exception e)
+        {
+            logger.error("labelData=" + labelData);
+            logger.error("解析标签数据失败");
+
+            printResponse.setErrorMessage("解析标签数据失败，标签数据应为JSON格式");
+            return printResponse;
+        }
 
         //保存标签历史, 打印成功后更新状态
         Label label = labelService.createLabelHistory();
