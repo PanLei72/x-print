@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://jmix.io/schema/ui/window"
+        caption="msg://labelDesignEdit.caption"
+        focusComponent="form">
+    <data>
+        <instance id="labelDesignDc"
+                  class="com.x.print.domain.model.labeldesign.LabelDesign">
+            <loader id="labelDesignDl"/>
+        </instance>
+    </data>
+    <facets>
+        <dataLoadCoordinator auto="true"/>
+        <screenSettings id="settingsFacet" auto="true"/>
+    </facets>
+    <actions>
+        <action id="windowCommitAndClose" caption="msg:///actions.Ok"
+                icon="EDITOR_OK"
+                primary="true"
+                shortcut="${COMMIT_SHORTCUT}"/>
+        <action id="windowClose"
+                caption="msg:///actions.Close"
+                icon="EDITOR_CANCEL"/>
+    </actions>
+    <dialogMode height="AUTO"
+                width="AUTO"
+                modal="true"
+                forceDialog="true"/>
+    <layout spacing="true" expand="editActions">
+        <form id="form" dataContainer="labelDesignDc">
+            <column width="350px">
+                <textField id="labelNameField" property="labelName"/>
+                <textField id="descriptionField" property="description"/>
+                <textField id="heightField" property="height"/>
+                <textField id="widthField" property="width"/>
+                <comboBox id="classNameField" property="className"/>
+                <comboBox id="orientationField" property="orientation"/>
+                <entityPicker id="labelDataDefinitionField" property="labelDataDefinition"/>
+            </column>
+            <column width="350px">
+                <image width="100%" height="100%" scaleMode="COVER" rowspan="6" id="labelImage"/>
+            </column>
+        </form>
+        <hbox id="editActions" spacing="true">
+            <button id="commitAndCloseBtn" action="windowCommitAndClose"/>
+            <button id="closeBtn" action="windowClose"/>
+        </hbox>
+    </layout>
+</window>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<menu-config xmlns="http://jmix.io/schema/ui/menu">
+
+    <item screen="Printer.browse" caption="msg://com.x.print.ui.screen.printer/printerBrowse.menu" icon="PRINT"/>
+
+    <menu id="labelManagement" caption="msg://com.x.print/menu.labelManagement" icon="QRCODE">
+        <item screen="LabelDataDefinition.browse"
+              caption="msg://com.x.print.ui.screen.labeldatadefinition/labelDataDefinitionBrowse.menu" icon="DATABASE"/>
+        <item screen="LabelDesign.browse" caption="msg://com.x.print.ui.screen.labeldesign/labelDesignBrowse.menu" icon="FILE_O"/>
+    </menu>
+
+    <menu id="printQuery" caption="msg://com.x.print/menu.printQuery" icon="SEARCH_PLUS">
+        <item screen="PrintQueue.browse" caption="msg://com.x.print.ui.screen.printqueue/printQueueBrowse.menu" icon="SEARCH"/>
+        <item screen="Label.browse" caption="msg://com.x.print.ui.screen.label/labelBrowse.menu" icon="SEARCH"/>
+    </menu>
+
+    <menu id="userData" caption="msg://com.x.print/menu.userManagement" icon="USERS">
+        <item screen="User.browse" caption="msg://com.x.print.ui.screen.user/UserBrowse.caption" icon="USER_MD"/>
+    </menu>
+<!--    <item screen="themeSettingsScreen" caption="msg://io.jmix.ui.app.themesettings/themeSettings.caption" icon="MOON_O"/>-->
+
+
+
+</menu-config>

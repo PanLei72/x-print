@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://jmix.io/schema/ui/window"
+        caption="msg://labelDataDefinitionEdit.caption"
+        focusComponent="form">
+    <data>
+        <instance id="labelDataDefinitionDc"
+                  class="com.x.print.domain.model.labeldatadefinition.LabelDataDefinition">
+            <fetchPlan extends="_base">
+                <property name="labelVariables" fetchPlan="_base"/>
+            </fetchPlan>
+            <loader/>
+            <collection id="labelVariablesDc" property="labelVariables"/>
+        </instance>
+    </data>
+    <facets>
+        <dataLoadCoordinator auto="true"/>
+        <screenSettings id="settingsFacet" auto="true"/>
+    </facets>
+    <actions>
+        <action id="windowCommitAndClose" caption="msg:///actions.Ok"
+                icon="EDITOR_OK"
+                primary="true"
+                shortcut="${COMMIT_SHORTCUT}"/>
+        <action id="windowClose"
+                caption="msg:///actions.Close"
+                icon="EDITOR_CANCEL"/>
+    </actions>
+    <dialogMode height="600"
+                width="800"
+                modal="true"
+                resizable="true"
+                forceDialog="true"/>
+    <layout spacing="true" expand="labelVariablesBox">
+        <form id="form" dataContainer="labelDataDefinitionDc">
+            <column width="350px">
+                <textField id="labelDataDefinitionNameField" property="labelDataDefinitionName"/>
+                <textField id="descriptionField" property="description"/>
+            </column>
+        </form>
+        <groupBox id="labelVariablesBox"
+                  width="100%"
+                  height="100%"
+                  expand="labelVariablesTable"
+                  caption="msg://com.x.print.domain.model.labeldatadefinition/LabelDataDefinition.labelVariables">
+            <table id="labelVariablesTable" dataContainer="labelVariablesDc" width="100%" height="200px">
+                <actions>
+                    <action id="create" type="create"/>
+                    <action id="edit" type="edit"/>
+                    <action id="remove" type="remove"/>
+                </actions>
+                <columns>
+                    <column id="labelVariableName"/>
+                    <column id="description"/>
+                    <column id="defaultValue"/>
+                </columns>
+                <buttonsPanel>
+                    <button action="labelVariablesTable.create"/>
+                    <button action="labelVariablesTable.edit"/>
+                    <button action="labelVariablesTable.remove"/>
+                </buttonsPanel>
+            </table>
+        </groupBox>
+        <hbox id="editActions" spacing="true">
+            <button id="commitAndCloseBtn" action="windowCommitAndClose"/>
+            <button id="closeBtn" action="windowClose"/>
+        </hbox>
+    </layout>
+</window>

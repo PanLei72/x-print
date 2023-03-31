@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<services xmlns="http://jmix.io/schema/rest/services">
+    <service name="print_PrintService">
+        <method name="printLabel">
+            <param name="printRequest"/>
+        </method>
+    </service>
+</services>

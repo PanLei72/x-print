@@ -1,0 +1,148 @@
+@import "../helium/helium";
+@import "side-menu-layout";
+
+@mixin print {
+  @include helium;
+
+  --window-header-background-color: #f1f1f1;
+
+    //////////////////////////////////////////////////////////////////////////////////////////////////
+    // Side menu
+    //////////////////////////////////////////////////////////////////////////////////////////////////
+    .jmix-drawer:not(.collapsed) {
+      @include side-menu-layout();
+    }
+
+    .jmix-drawer.collapsed:hover {
+      @include side-menu-layout();
+    }
+
+  .v-tabsheet {
+    background-color: #f1f1f1;
+  }
+  .v-tabsheet.jmix-main-tabsheet.framed.padded-tabbar>.v-tabsheet-tabcontainer {
+    background-color: #f1f1f1;
+  }
+  .jmix-app-window-wrap,  .v-window-contents{
+    background-color: #f1f1f1;
+  }
+
+
+  .v-reconnect-dialog {
+    border-radius: 6px;
+  }
+  /* SplitPanel */
+  .v-splitpanel-hsplitter:after, .v-splitpanel-vsplitter:after {
+    background-color: #f1f1f1;
+  }
+  .v-splitpanel-vertical>div>.v-splitpanel-vsplitter:after
+  {
+    top: 0px;
+    bottom: 0px;
+  }
+  .v-splitpanel-horizontal>div>.v-splitpanel-hsplitter:after
+  {
+    left: 0px;
+    right: 0px;
+  }
+
+
+  .v-tooltip {
+    background-color: var(--secondary-color_rgb);
+    border-radius: 6px;
+  }
+  .v-Notification.system {
+    border-radius: 6px;
+  }
+
+  /** sidemenu滚动条样式 **/
+  .jmix-sidemenu::-webkit-scrollbar {
+    width: 10px;
+  }
+  .jmix-sidemenu::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0);
+    border-radius: 0px;
+  }
+  .jmix-sidemenu::-webkit-scrollbar-thumb {
+    border-radius: 8px;
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.4);
+  }
+
+  .jmix-scrollbox::-webkit-scrollbar {
+     width: 10px;
+     height: 10px;
+   }
+   .jmix-scrollbox::-webkit-scrollbar-track {
+     -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0);
+     border-radius: 0px;
+   }
+   .jmix-scrollbox::-webkit-scrollbar-thumb {
+     border-radius: 8px;
+     -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.4);
+   }
+
+    .v-grid-tablewrapper {
+      border-radius: 6px;
+    }
+    .v-grid-sidebar.v-contextmenu.closed, .v-grid-sidebar.v-contextmenu.open, .v-grid-scroller, .v-grid-scroller-horizontal, .v-grid-scroller-vertical {
+      border-radius: 6px;
+    }
+    .v-grid-horizontal-scrollbar-deco, .v-grid-vertical-scrollbar-deco {
+      border-radius: 6px;
+    }
+    .v-grid-header-deco, .v-grid-footer-deco {
+      border-radius: 6px;
+    }
+
+
+
+    .jmix-login-panel{
+        background: url("./branding/background.svg");
+        border: none;
+    }
+
+    .jmix-login-caption{
+      color: var(--primary-color);
+      font-size: 24px;
+    }
+
+    .jmix-login-main-layout {
+      background: url("./branding/background.svg");
+    }
+    .jmix-brandlogin-textfield {
+      border: none;
+    }
+
+    .jmix-brandlogin-textfield {
+      border: none;
+    }
+
+    .jmix-drawer .jmix-drawer-header
+    {
+      background: url("./branding/background.svg");
+    }
+    .jmix-drawer .jmix-drawer-footer{
+      background: url("./branding/background.svg");
+    }
+
+
+    .jmix-drawer:not(.collapsed) .jmix-sidemenu-item-header-open .jmix-sidemenu-item-wrap
+    {
+      color: var(--primary-color)
+    }
+    .jmix-drawer-layout, .jmix-drawer-content, .jmix-drawer-header {
+      background: url("./branding/background.svg");
+    }
+
+    .jmix-drawer .jmix-drawer-content.jmix-sidemenu .jmix-sidemenu-submenu.jmix-sidemenu-submenu-open {
+    //         background: url("./branding/background.svg");
+      background:none;
+    }
+    .jmix-drawer.collapsed .jmix-sidemenu>.jmix-sidemenu-item-header-open .jmix-sidemenu-item-wrap{
+      color: var(--primary-color)
+    }
+    .jmix-drawer.collapsed:hover .jmix-sidemenu-item-header-open .jmix-sidemenu-item-wrap
+    {
+      color: var(--primary-color)
+    }
+}

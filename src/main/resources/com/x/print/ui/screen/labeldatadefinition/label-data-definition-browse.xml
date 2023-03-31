@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://jmix.io/schema/ui/window"
+        xmlns:c="http://jmix.io/schema/ui/jpql-condition"
+        caption="msg://labelDataDefinitionBrowse.caption"
+        focusComponent="labelDataDefinitionsTable">
+    <data readOnly="true">
+        <collection id="labelDataDefinitionsDc"
+                    class="com.x.print.domain.model.labeldatadefinition.LabelDataDefinition">
+            <fetchPlan extends="_base">
+                <property name="labelVariables" fetchPlan="_base"/>
+            </fetchPlan>
+            <loader id="labelDataDefinitionsDl">
+                <query>
+                    <![CDATA[select e from LabelDataDefinition e order by e.labelDataDefinitionName]]>
+                </query>
+            </loader>
+            <collection id="labelVariablesDc" property="labelVariables"/>
+        </collection>
+    </data>
+    <facets>
+        <dataLoadCoordinator auto="true"/>
+        <screenSettings id="settingsFacet" auto="true"/>
+    </facets>
+    <actions>
+        <action id="lookupSelectAction"
+                caption="msg:///actions.Select"
+                icon="LOOKUP_OK"
+                primary="true"
+                shortcut="${COMMIT_SHORTCUT}"/>
+        <action id="lookupCancelAction"
+                caption="msg:///actions.Cancel"
+                icon="LOOKUP_CANCEL"/>
+    </actions>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="split" spacing="true">
+        <filter id="filter"
+                dataLoader="labelDataDefinitionsDl">
+            <properties include=".*"/>
+        </filter>
+        <split id="split" minSplitPosition="20%" maxSplitPosition="80%" width="100%">
+            <dataGrid id="labelDataDefinitionsTable"
+                      width="100%"
+                      height="100%"
+                      dataContainer="labelDataDefinitionsDc">
+                <actions>
+                    <action id="create" type="create"/>
+                    <action id="edit" type="edit"/>
+                    <action id="remove" type="remove"/>
+                </actions>
+                <columns>
+                    <column property="labelDataDefinitionName" id="labelDataDefinitionName"/>
+                    <column property="description" id="description"/>
+                </columns>
+                <simplePagination/>
+                <buttonsPanel id="buttonsPanel"
+                              alwaysVisible="true">
+                    <button id="createBtn" action="labelDataDefinitionsTable.create"/>
+                    <button id="editBtn" action="labelDataDefinitionsTable.edit"/>
+                    <button id="removeBtn" action="labelDataDefinitionsTable.remove"/>
+                </buttonsPanel>
+            </dataGrid>
+            <dataGrid id="labelVariablesTable"
+                      width="100%"
+                      height="100%"
+                      dataContainer="labelVariablesDc">
+                <columns>
+                    <column property="labelVariableName" id="labelVariableName"/>
+                    <column property="description" id="description"/>
+                    <column property="defaultValue" id="defaultValue"/>
+                </columns>
+            </dataGrid>
+
+        </split>
+        <hbox id="lookupActions" spacing="true" visible="false">
+            <button action="lookupSelectAction"/>
+            <button action="lookupCancelAction"/>
+        </hbox>
+    </layout>
+</window>

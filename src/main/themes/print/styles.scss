@@ -1,0 +1,8 @@
+@import "print-defaults";
+@import "addons";
+@import "print";
+
+.print {
+  @include addons;
+  @include print;
+}
