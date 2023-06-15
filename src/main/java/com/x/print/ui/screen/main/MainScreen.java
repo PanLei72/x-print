@@ -1,6 +1,9 @@
 package com.x.print.ui.screen.main;
 
+import com.vaadin.ui.UI;
+import io.jmix.ui.AppUI;
 import io.jmix.ui.ScreenTools;
+import io.jmix.ui.action.Action;
 import io.jmix.ui.component.AppWorkArea;
 import io.jmix.ui.component.Button;
 import io.jmix.ui.component.Window;
@@ -53,6 +56,44 @@ public class MainScreen extends Screen implements Window.HasWorkArea {
                 UiControllerUtils.getScreenContext(this).getScreens());
 
         screenTools.handleRedirect();
+    }
+
+    @Subscribe("popupButton.logoutAction")
+    public void onPopupButtonLogoutAction(Action.ActionPerformedEvent event) {
+        AppUI ui = AppUI.getCurrent();
+        if (ui == null) {
+            throw new IllegalStateException("Logout button is not attached to UI");
+        }
+        ui.getApp().logout();
+    }
+
+    @Subscribe("fullScreenButton")
+    public void onFullScreenButtonClick(Button.ClickEvent event) {
+        UI.getCurrent().getPage().getJavaScript().execute(
+                "var dom = document.getElementsByTagName('body')[0];" +
+                        "if (document.fullscreenElement === null) {\n" +
+                        "if (dom.requestFullscreen) {\n" +
+                        "    dom.requestFullscreen();\n" +
+                        "} else if (dom.msRequestFullscreen) {\n" +
+                        "    dom.msRequestFullscreen();\n" +
+                        "} else if (dom.mozRequestFullScreen) {\n" +
+                        "    dom.mozRequestFullScreen();\n" +
+                        "} else if (dom.webkitRequestFullscreen) {\n" +
+                        "    dom.webkitRequestFullscreen();\n" +
+                        "}" +
+                        "  }\n" +
+                        "  else\n" +
+                        " {\n" +
+                        "  if (document.exitFullscreen) {\n" +
+                        "      document.exitFullscreen();\n" +
+                        "  } else if (document.msExitFullscreen) {\n" +
+                        "      document.msExitFullscreen();\n" +
+                        "  } else if (document.mozCancelFullScreen) {\n" +
+                        "      document.mozCancelFullScreen();\n" +
+                        "  } else if (document.webkitExitFullscreen) {\n" +
+                        "      document.webkitExitFullscreen();\n" +
+                        "  }" +
+                        " }");
     }
 
 

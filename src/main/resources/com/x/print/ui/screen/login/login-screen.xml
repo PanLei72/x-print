@@ -22,20 +22,34 @@
                        value="msg://welcomeLabel"/>
 
                 <vbox id="loginForm"
-                      spacing="true"
-                      stylename="jmix-login-form">
-                    <cssLayout id="loginCredentials"
-                               stylename="jmix-login-credentials">
+                      spacing="true"  >
+                    <vbox id="loginCredentials"
+                          spacing="true" >
+<!--                        <textField id="usernameField"-->
+<!--                                   htmlName="usernameField"-->
+<!--                                   inputPrompt="msg://usernamePlaceholder"-->
+<!--                                   stylename="jmix-login-username"/>-->
+<!--                        <passwordField id="passwordField"-->
+<!--                                       autocomplete="true"-->
+<!--                                       htmlName="passwordField"-->
+<!--                                       inputPrompt="msg://passwordPlaceholder"-->
+<!--                                       stylename="jmix-login-password"/>-->
                         <textField id="usernameField"
                                    htmlName="usernameField"
+                                   height="40px"
+                                   width="350px"
+                                   icon="USER"
                                    inputPrompt="msg://usernamePlaceholder"
-                                   stylename="jmix-login-username"/>
+                                   stylename="jmix-brandlogin-textfield inline-icon"/>
                         <passwordField id="passwordField"
                                        autocomplete="true"
                                        htmlName="passwordField"
+                                       icon="LOCK"
+                                       height="40px"
+                                       width="350px"
                                        inputPrompt="msg://passwordPlaceholder"
-                                       stylename="jmix-login-password"/>
-                    </cssLayout>
+                                       stylename="jmix-brandlogin-textfield inline-icon"/>
+                    </vbox>
                     <hbox id="rememberLocalesBox"
                           stylename="jmix-login-remember-locales">
                         <checkBox id="rememberMeCheckBox"

@@ -1,14 +1,14 @@
 package com.x.print.ui.screen.labeldesign;
 
 import com.x.print.domain.model.labeldesign.ILabelDesignService;
+import com.x.print.domain.model.labeldesign.LabelDesign;
 import io.jmix.core.LoadContext;
 import io.jmix.core.MetadataTools;
 import io.jmix.ui.UiComponents;
 import io.jmix.ui.component.*;
-import io.jmix.ui.component.Image;
-import io.jmix.ui.screen.*;
-import com.x.print.domain.model.labeldesign.LabelDesign;
+import io.jmix.ui.model.CollectionLoader;
 import io.jmix.ui.screen.LookupComponent;
+import io.jmix.ui.screen.*;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -27,19 +27,22 @@ public class LabelBrowse extends StandardLookup<LabelDesign> {
     private FlowBoxLayout flowBox;
     @Autowired
     private MetadataTools metadataTools;
+    @Autowired
+    private DataGrid<LabelDesign> labelsTable;
+    @Autowired
+    private ScrollBoxLayout scrollBox;
+    @Autowired
+    private CollectionLoader<LabelDesign> labelsDl;
 
     @Install(to = "labelsDl", target = Target.DATA_LOADER)
     private List<LabelDesign> labelsDlLoadDelegate(LoadContext<LabelDesign> loadContext) {
        return labelDesignService.loadAllLabelDesign();
     }
 
-    @Subscribe("tabSheet")
-    public void onTabSheetSelectedTabChange(TabSheet.SelectedTabChangeEvent event) {
-        TabSheet.Tab tab = event.getSelectedTab();
-        if(!"labelImageTab".equals(tab.getName()))
-        {
-            return;
-        }
+    @Subscribe("viewImageBtn")
+    public void onViewImageBtnClick(Button.ClickEvent event) {
+        scrollBox.setVisible(true);
+        labelsTable.setVisible(false);
         List<LabelDesign> labelDesignList = labelDesignService.loadAllLabelDesign();
         if(labelDesignList == null || labelDesignList.size() == 0)
         {
@@ -49,11 +52,8 @@ public class LabelBrowse extends StandardLookup<LabelDesign> {
         for(LabelDesign labelDesign : labelDesignList)
         {
             GroupBoxLayout groupBoxLayout = uiComponents.create(GroupBoxLayout.class);
-//            groupBoxLayout.setWidth("350px");
-//            groupBoxLayout.setHeight("350px");
             groupBoxLayout.setWidth(labelDesign.getWidth()+50+"");
             groupBoxLayout.setHeight(labelDesign.getHeight()+80+"");
-//            groupBoxLayout.setShowAsPanel(true);
 
             String displayName = metadataTools.getInstanceName(labelDesign);
             groupBoxLayout.setCaption(displayName);
@@ -74,7 +74,10 @@ public class LabelBrowse extends StandardLookup<LabelDesign> {
         }
     }
 
-
-
-
+    @Subscribe("tableBtn")
+    public void onTableBtnClick(Button.ClickEvent event) {
+        scrollBox.setVisible(false);
+        labelsTable.setVisible(true);
+        labelsDl.load();
+    }
 }

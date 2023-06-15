@@ -1,9 +1,12 @@
 <window xmlns="http://jmix.io/schema/ui/window"
         caption="msg://application.caption">
 
-    <layout>
-        <cssLayout id="horizontalWrap"
-                   stylename="jmix-drawer-layout">
+    <layout width="100%" height="100%" expand="horizontalWrap">
+        <hbox id="horizontalWrap"
+              height="100%"
+              width="100%"
+              expand="contentVbox"
+              stylename="jmix-drawer-layout">
             <drawer id="drawer" expandOnHover="true">
                 <cssLayout id="appTitleBox"
                            stylename="jmix-drawer-header"
@@ -19,29 +22,55 @@
                            stylename="app-title"
                            value="msg://application.logoLabel"/>
                 </cssLayout>
-                <sideMenu id="sideMenu"
-                          width="100%"
-                          stylename="jmix-drawer-content"/>
-                <cssLayout id="controlBox"
-                           stylename="jmix-drawer-footer"
-                           width="100%">
-                    <button id="collapseDrawerButton"
-                            icon="CHEVRON_LEFT"
-                            stylename="jmix-drawer-collapse-button"
-                            description="msg://sideMenuCollapse"/>
-                    <userIndicator id="userIndicator"
-                                   align="MIDDLE_CENTER"/>
-                    <logoutButton id="logoutButton"
-                                  icon="SIGN_OUT"
-                                  description="msg://logoutBtnDescription"/>
-                </cssLayout>
+                <vbox id="sideMenuVbox" box.expandRatio="1" width="100%" height="100%">
+                    <sideMenu id="sideMenu"
+                              width="100%"
+                              height="100%"
+                              stylename="jmix-drawer-content"/>
+                </vbox>
             </drawer>
-            <workArea id="workArea"
-                      stylename="jmix-workarea"
-                      height="100%">
-                <initialLayout spacing="true" margin="true">
-                </initialLayout>
-            </workArea>
-        </cssLayout>
+            <vbox id="contentVbox"
+                  box.expandRatio="1"
+                  width="100%"
+                  height="100%"
+                  expand="workArea"
+            >
+                <hbox id="header"
+                      expand="blank"
+                      stylename="home-background"
+                      spacing="true"
+                      height="30px"
+                      width="100%">
+                    <linkButton id="collapseDrawerButton"
+                                icon="CHEVRON_LEFT"
+                                align="MIDDLE_CENTER"
+                                stylename="jmix-drawer-collapse-button"
+                                description="msg://sideMenuCollapse"/>
+                    <linkButton id="favoriteButton"
+                                align="MIDDLE_CENTER"
+                                description="Favorite"
+                                icon="STAR_O"/>
+                    <label id="blank"></label>
+                    <linkButton id="fullScreenButton"
+                                align="MIDDLE_CENTER"
+                                description="msg://fullScreen"
+                                icon="ARROWS_ALT"/>
+                    <popupButton id="popupButton" align="MIDDLE_CENTER"
+                                 stylename="link" showActionIcons="true"
+                                 icon="USER">
+                        <actions>
+                            <action id="logoutAction" icon="SIGN_OUT" caption="msg://logoutBtnDescription"/>
+                        </actions>
+                    </popupButton>
+                </hbox>
+                <workArea id="workArea"
+                          stylename="jmix-workarea"
+                          width="100%"
+                          height="100%">
+                    <initialLayout spacing="true" margin="true">
+                    </initialLayout>
+                </workArea>
+            </vbox>
+        </hbox>
     </layout>
 </window>

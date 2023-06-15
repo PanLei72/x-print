@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <window xmlns="http://jmix.io/schema/ui/window"
         caption="msg://labelDesignEdit.caption"
-        focusComponent="form">
+        focusComponent="editActions">
     <data>
         <instance id="labelDesignDc"
                   class="com.x.print.domain.model.labeldesign.LabelDesign">
@@ -24,7 +24,6 @@
     <dialogMode height="600"
                 width="800"
                 modal="true"
-                resizable="true"
                 forceDialog="true"/>
     <layout spacing="true" expand="labelImage">
         <image width="100%"

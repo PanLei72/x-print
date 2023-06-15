@@ -25,7 +25,7 @@
     </actions>
     <dialogMode height="600"
                 width="800"/>
-    <layout expand="tabSheet" spacing="true">
+    <layout expand="contentVbox" spacing="true">
         <filter id="filter" dataLoader="labelsDl">
             <properties include=".*"/>
             <configurations>
@@ -34,60 +34,57 @@
                 </configuration>
             </configurations>
         </filter>
-        <tabSheet id="tabSheet" width="100%" height="100%">
-            <tab id="labelDesign"
-                 caption="msg://labelDesignTable"
-                 margin="true" expand="labelsTable"
-                 spacing="true">
-                <dataGrid id="labelsTable"
-                          width="100%"
-                          textSelectionEnabled="true"
-                          dataContainer="labelsDc">
-                    <actions>
-                        <action id="create" type="create"></action>
-                        <action id="edit" type="edit"></action>
-                        <action id="view" type="view">
-                            <properties>
-                                <property name="openMode" value="DIALOG"/>
-                                <property name="screenClass" value="com.x.print.ui.screen.labeldesign.LabelView"/>
-                            </properties>
-                        </action>
-                        <action id="remove" type="remove"></action>
-                    </actions>
-                    <columns>
-                        <column property="labelName" id="labelName"/>
-                        <column property="description" id="description"/>
-                        <column property="height" id="height"/>
-                        <column property="width" id="width"/>
-                        <column property="orientation" id="orientation"/>
-                        <column property="className" id="className"/>
-                        <column property="labelDataDefinition" id="labelDataDefinition"/>
-                    </columns>
-                    <buttonsPanel id="buttonsPanel"
-                                  alwaysVisible="true">
-                        <button id="createBtn" action="labelsTable.create"/>
-                        <button id="editBtn" action="labelsTable.edit"/>
-                        <button id="viewBtn" action="labelsTable.view"/>
-                        <button id="removeBtn" action="labelsTable.remove"/>
-                    </buttonsPanel>
-                </dataGrid>
-            </tab>
-            <tab id="labelImageTab"
-                 caption="msg://labDesignImage"
-                 margin="true"
-                 expand="scrollBox"
-                 spacing="true">
-                <scrollBox id="scrollBox"
-                           height="100%"
-                           width="100%"
-                           spacing="true">
-                    <flowBox id="flowBox"
-                             spacing="true"
-                             width="100%">
-                    </flowBox>
-                </scrollBox>
-            </tab>
-        </tabSheet>
+        <vbox id="contentVbox">
+            <hbox id="buttonsPanel" width="100%" height="AUTO" margin="true" spacing="true">
+                <button id="createBtn" action="labelsTable.create" align="MIDDLE_LEFT"/>
+                <button id="editBtn" action="labelsTable.edit" align="MIDDLE_LEFT"/>
+                <button id="viewBtn" action="labelsTable.view" align="MIDDLE_LEFT"/>
+                <button id="removeBtn" action="labelsTable.remove" align="MIDDLE_LEFT"/>
+                <label box.expandRatio="1" width="100%"></label>
+
+                <button id="tableBtn" icon="TABLE" align="MIDDLE_RIGHT" description="msg://labelDesignTable"></button>
+                <button id="viewImageBtn" icon="VIEW_ACTION" align="MIDDLE_RIGHT" description="msg://labDesignImage"></button>
+            </hbox>
+            <dataGrid id="labelsTable"
+                      width="100%"
+                      height="100%"
+                      box.expandRatio="1"
+                      textSelectionEnabled="true"
+                      dataContainer="labelsDc">
+                <actions>
+                    <action id="create" type="create"></action>
+                    <action id="edit" type="edit"></action>
+                    <action id="view" type="view">
+                        <properties>
+                            <property name="openMode" value="DIALOG"/>
+                            <property name="screenClass" value="com.x.print.ui.screen.labeldesign.LabelView"/>
+                        </properties>
+                    </action>
+                    <action id="remove" type="remove"></action>
+                </actions>
+                <columns>
+                    <column property="labelName" id="labelName"/>
+                    <column property="description" id="description"/>
+                    <column property="height" id="height"/>
+                    <column property="width" id="width"/>
+                    <column property="orientation" id="orientation"/>
+                    <column property="className" id="className"/>
+                    <column property="labelDataDefinition" id="labelDataDefinition"/>
+                </columns>
+
+            </dataGrid>
+            <scrollBox id="scrollBox"
+                       height="100%"
+                       width="100%"
+                       box.expandRatio="1"
+                       visible="false"
+                       spacing="true">
+                <flowBox id="flowBox"
+                         spacing="true"
+                         width="100%">
+                </flowBox>
+            </scrollBox>
+        </vbox>
         <hbox id="lookupActions" spacing="true" visible="false">
             <button action="lookupSelectAction"/>
             <button action="lookupCancelAction"/>

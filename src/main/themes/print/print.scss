@@ -4,8 +4,9 @@
 @mixin print {
   @include helium;
 
-  --window-header-background-color: #f1f1f1;
+  --window-header-background-color: #f1f4f6;
   --button-default-color: #dedede;
+  --secondary-color_rgb: rgb(84, 84, 84);
 
     //////////////////////////////////////////////////////////////////////////////////////////////////
     // Side menu
@@ -19,22 +20,24 @@
     }
 
   .v-tabsheet {
-    background-color: #f1f1f1;
+    background-color: #f1f4f6;
   }
   .v-tabsheet.jmix-main-tabsheet.framed.padded-tabbar>.v-tabsheet-tabcontainer {
-    background-color: #f1f1f1;
+    background-color: #f1f4f6;
   }
   .jmix-app-window-wrap,  .v-window-contents{
-    background-color: #f1f1f1;
+    background-color: #f1f4f6;
   }
-
+  .jmix-main-singlewindow{
+      background-color: #f1f4f6;
+  }
 
   .v-reconnect-dialog {
     border-radius: 6px;
   }
   /* SplitPanel */
   .v-splitpanel-hsplitter:after, .v-splitpanel-vsplitter:after {
-    background-color: #f1f1f1;
+    background-color: #f1f4f6;
   }
   .v-splitpanel-vertical>div>.v-splitpanel-vsplitter:after
   {
