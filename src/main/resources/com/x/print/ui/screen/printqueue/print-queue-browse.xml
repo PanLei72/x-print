@@ -50,6 +50,7 @@
                 <column property="sequenceNumber" id="sequenceNumber"/>
                 <column property="label.labelName" id="label.labelName"/>
                 <column property="label.labelQuantity" id="label.labelQuantity"/>
+                <column property="label.createdDate" id="label.createdDate"/>
                 <column property="label.labelData" id="label.labelData"/>
             </columns>
             <simplePagination/>

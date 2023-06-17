@@ -46,10 +46,6 @@
                                 align="MIDDLE_CENTER"
                                 stylename="jmix-drawer-collapse-button"
                                 description="msg://sideMenuCollapse"/>
-                    <linkButton id="favoriteButton"
-                                align="MIDDLE_CENTER"
-                                description="Favorite"
-                                icon="STAR_O"/>
                     <label id="blank"></label>
                     <linkButton id="fullScreenButton"
                                 align="MIDDLE_CENTER"
