@@ -27,6 +27,7 @@ import java.awt.print.Book;
 import java.awt.print.PageFormat;
 import java.awt.print.Paper;
 import java.awt.print.PrinterJob;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -79,6 +80,8 @@ public class PrintWorker implements Runnable {
                         //通俗理解就是书、文档
                         Book book = new Book();
                         //把 PageFormat 和 Printable 添加到书中，组成一个页面
+
+                        List<PrintQueue> successPrintQueueList = new ArrayList<>();
                         for (PrintQueue printQueue : printQueueList) {
                             Label label = printQueue.getLabel();
                             String labelName = label.getLabelName();//标签名称
@@ -87,7 +90,7 @@ public class PrintWorker implements Runnable {
                             LabelDesign labelDesign = labelDesignService.loadLabelDesignByLabelName(labelName);
                             if (labelDesign == null) {
                                 logger.error("[" + printerName + "]标签【" + labelName + "】不存在");
-                                continue;
+                                throw new RuntimeException("[" + printerName + "]标签【" + labelName + "】不存在");
                             }
 
                             String className = labelDesign.getClassName();
@@ -95,7 +98,7 @@ public class PrintWorker implements Runnable {
                             int labelWidth = labelDesign.getWidth().intValue();
                             int labelHeight = labelDesign.getHeight().intValue();
 
-                            logger.error("[" + printerName + "]getLandescapeon：" + labelDesign.getOrientation());
+                            logger.info("[" + printerName + "]getOrientation：" + labelDesign.getOrientation());
 
                             PageFormat pageFormat = new PageFormat();
                             if (Orientation.LANDSCAPE.equals(labelDesign.getOrientation())) {
@@ -111,34 +114,30 @@ public class PrintWorker implements Runnable {
                             paper.setImageableArea(0, 0, labelWidth, labelHeight);//A4(595 X 842)设置打印区域，其实0，0应该是72，72，因为A4纸的默认X,Y边距是72
                             pageFormat.setPaper(paper);
 
-                            try {
-                                Class<?> cls = Class.forName(className);
+                            Class<?> cls = Class.forName(className);
 
-                                Object labelObject = cls.newInstance();//初始化一个实例
-                                LabelPrintable labelPrintableInstance = (LabelPrintable) labelObject;
-                                if (labelPrintableInstance == null) {
-                                    logger.error("[" + printerName + "]实例化对象失败");
-                                    continue;
-                                }
-                                labelPrintableInstance.setPrinterName(printerName);
-
-                                for (int i = 0; i < labelQuantity; i++) {
-                                    String labelDataStr = label.getLabelData();
-                                    JSONObject labelData = JSONObject.parseObject(labelDataStr);
-                                    labelPrintableInstance.setLabelData(labelData);
-
-                                    book.append(labelPrintableInstance, pageFormat);
-                                }
-                            } catch (Exception e) {
-                                logger.error("[" + printerName + "]反射类" + e.getMessage());
-                                logger.error("[" + printerName + "]反射类", e);
+                            Object labelObject = cls.newInstance();//初始化一个实例
+                            LabelPrintable labelPrintableInstance = (LabelPrintable) labelObject;
+                            if (labelPrintableInstance == null) {
+                                logger.error("[" + printerName + "]实例化对象失败");
+                                throw new RuntimeException("[" + printerName + "]实例化对象失败");
                             }
+                            labelPrintableInstance.setPrinterName(printerName);
+
+                            for (int i = 0; i < labelQuantity; i++) {
+                                String labelDataStr = label.getLabelData();
+                                JSONObject labelData = JSONObject.parseObject(labelDataStr);
+                                labelPrintableInstance.setLabelData(labelData);
+
+                                book.append(labelPrintableInstance, pageFormat);
+                            }
+                            successPrintQueueList.add(printQueue);
                         }
                         if(book.getNumberOfPages() == 0)
                         {
                             continue;
                         }
-                        this.printBook(printQueueList, book);
+                        this.printBook(successPrintQueueList, book);
                     }
                 } catch (Exception e) {
                     logger.error("[" + printerName + "]循环打印异常:" + e.getMessage());
