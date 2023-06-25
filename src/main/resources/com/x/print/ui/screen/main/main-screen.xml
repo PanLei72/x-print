@@ -2,10 +2,9 @@
         caption="msg://application.caption">
 
     <layout width="100%" height="100%" expand="horizontalWrap">
-        <hbox id="horizontalWrap"
+        <cssLayout id="horizontalWrap"
               height="100%"
               width="100%"
-              expand="contentVbox"
               stylename="jmix-drawer-layout">
             <drawer id="drawer" expandOnHover="true">
                 <cssLayout id="appTitleBox"
@@ -68,6 +67,6 @@
                     </initialLayout>
                 </workArea>
             </vbox>
-        </hbox>
+        </cssLayout>
     </layout>
 </window>

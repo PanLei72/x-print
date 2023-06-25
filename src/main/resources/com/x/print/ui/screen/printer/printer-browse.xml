@@ -36,7 +36,7 @@
                 <column property="printerName" id="printerName"/>
                 <column property="printerIsAcceptingJobs" id="printerIsAcceptingJobs"/>
                 <column property="queuedJobCount" id="queuedJobCount"/>
-                <column property="printerState" id="printerState"/>
+<!--                <column property="printerState" id="printerState"/>-->
             </columns>
         </dataGrid>
         <hbox id="lookupActions" spacing="true" visible="false">
