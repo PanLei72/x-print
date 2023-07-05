@@ -42,7 +42,7 @@
                 <button id="removeBtn" action="labelsTable.remove" align="MIDDLE_LEFT"/>
                 <label box.expandRatio="1" width="100%"></label>
 
-                <button id="tableBtn" icon="TABLE" align="MIDDLE_RIGHT" description="msg://labelDesignTable"></button>
+                <button id="tableBtn" icon="TABLE" align="MIDDLE_RIGHT" enable="false" description="msg://labelDesignTable"></button>
                 <button id="viewImageBtn" icon="VIEW_ACTION" align="MIDDLE_RIGHT" description="msg://labDesignImage"></button>
             </hbox>
             <dataGrid id="labelsTable"

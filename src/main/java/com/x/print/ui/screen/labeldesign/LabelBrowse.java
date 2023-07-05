@@ -33,6 +33,10 @@ public class LabelBrowse extends StandardLookup<LabelDesign> {
     private ScrollBoxLayout scrollBox;
     @Autowired
     private CollectionLoader<LabelDesign> labelsDl;
+    @Autowired
+    private Button tableBtn;
+    @Autowired
+    private Button viewImageBtn;
 
     @Install(to = "labelsDl", target = Target.DATA_LOADER)
     private List<LabelDesign> labelsDlLoadDelegate(LoadContext<LabelDesign> loadContext) {
@@ -43,6 +47,10 @@ public class LabelBrowse extends StandardLookup<LabelDesign> {
     public void onViewImageBtnClick(Button.ClickEvent event) {
         scrollBox.setVisible(true);
         labelsTable.setVisible(false);
+
+        tableBtn.setEnabled(true);
+        viewImageBtn.setEnabled(false);
+
         List<LabelDesign> labelDesignList = labelDesignService.loadAllLabelDesign();
         if(labelDesignList == null || labelDesignList.size() == 0)
         {
@@ -78,6 +86,9 @@ public class LabelBrowse extends StandardLookup<LabelDesign> {
     public void onTableBtnClick(Button.ClickEvent event) {
         scrollBox.setVisible(false);
         labelsTable.setVisible(true);
+
+        tableBtn.setEnabled(false);
+        viewImageBtn.setEnabled(true);
         labelsDl.load();
     }
 }
