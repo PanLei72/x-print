@@ -1,12 +1,12 @@
 plugins {
-    id 'io.jmix' version '1.5.2'
+    id 'io.jmix' version '1.6.2'
     id 'java'
 }
 
 apply plugin: 'org.springframework.boot'
 
 jmix {
-    bomVersion = '1.5.2'
+    bomVersion = '1.6.2'
 }
 
 group = 'com.x'
@@ -67,6 +67,7 @@ dependencies {
     // https://mvnrepository.com/artifact/com.alibaba/fastjson
     implementation 'com.alibaba:fastjson:2.0.26'
 
+    implementation 'com.deepoove:poi-tl:1.12.2'
 }
 
 test {
