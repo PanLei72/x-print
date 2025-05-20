@@ -1,6 +1,7 @@
 package com.x.print.application;
 
 import com.alibaba.fastjson2.JSONObject;
+import com.alibaba.fastjson2.TypeReference;
 import com.deepoove.poi.XWPFTemplate;
 import com.jacob.activeX.ActiveXComponent;
 import com.jacob.com.Dispatch;
@@ -20,6 +21,7 @@ import io.jmix.core.FileRef;
 import io.jmix.core.FileStorage;
 import io.jmix.core.FileStorageLocator;
 import io.jmix.core.security.Authenticated;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.pdfbox.Loader;
@@ -220,11 +222,17 @@ public class PrintWorker implements Runnable {
 
         // 1. 使用 POITL 生成 Word 文档
         Map<String, Object> data = new HashMap<>();
-        data.put("title", "Hi, poi-tl Word模板引擎");
-        data.put("time", new Date());
 
-        XWPFTemplate template = XWPFTemplate.compile(inputStream).render(
-                data);
+        String labelDataStr = label.getLabelData();
+        if(StringUtils.isNotBlank(labelDataStr))
+        {
+//            JSONObject labelData = JSONObject.parseObject(labelDataStr);
+
+            Map<String, String> params = JSONObject.parseObject(labelDataStr, new TypeReference<Map<String, String>>(){});
+            data.putAll(params);
+        }
+
+        XWPFTemplate template = XWPFTemplate.compile(inputStream).render(data);
         try (FileOutputStream out = new FileOutputStream("output.docx")) {
             template.write(out);
         }
