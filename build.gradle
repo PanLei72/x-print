@@ -68,6 +68,12 @@ dependencies {
     implementation 'com.alibaba:fastjson:2.0.26'
 
     implementation 'com.deepoove:poi-tl:1.12.2'
+
+    // https://mvnrepository.com/artifact/com.hynnet/jacob
+    implementation("com.hynnet:jacob:1.18")
+
+    // https://mvnrepository.com/artifact/org.apache.pdfbox/pdfbox
+    implementation 'org.apache.pdfbox:pdfbox:3.0.2'
 }
 
 test {

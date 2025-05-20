@@ -37,6 +37,11 @@
         <filter id="filter"
                 dataLoader="labelDataDefinitionsDl">
             <properties include=".*"/>
+            <configurations>
+                <configuration id="defaultFilter" default="true" name="msg:///defaultFilter.name">
+                    <propertyFilter id="labelDataDefinitionName" operation="EQUAL" property="labelDataDefinitionName" operationEditable="false"/>
+                </configuration>
+            </configurations>
         </filter>
         <split id="split" minSplitPosition="20%" maxSplitPosition="80%" width="100%">
             <dataGrid id="labelDataDefinitionsTable"

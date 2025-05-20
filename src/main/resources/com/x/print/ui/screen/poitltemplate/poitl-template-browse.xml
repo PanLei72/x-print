@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://jmix.io/schema/ui/window"
+        xmlns:c="http://jmix.io/schema/ui/jpql-condition"
+        caption="msg://poitlTemplateBrowse.caption"
+        focusComponent="poitlTemplatesTable">
+    <data readOnly="true">
+        <collection id="poitlTemplatesDc"
+                    class="com.x.print.domain.model.poitltemplate.PoitlTemplate">
+            <fetchPlan extends="_base"/>
+            <loader id="poitlTemplatesDl">
+                <query>
+                    <![CDATA[select e from PoitlTemplate e]]>
+                </query>
+            </loader>
+        </collection>
+    </data>
+    <facets>
+        <dataLoadCoordinator auto="true"/>
+        <screenSettings id="settingsFacet" auto="true"/>
+    </facets>
+    <actions>
+        <action id="lookupSelectAction" type="lookup_select"/>
+        <action id="lookupCancelAction" type="lookup_discard"/>
+    </actions>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="poitlTemplatesTable" spacing="true">
+        <filter id="filter"
+                dataLoader="poitlTemplatesDl">
+            <properties include=".*"/>
+            <configurations>
+                <configuration id="defaultFilter" default="true" name="msg:///defaultFilter.name">
+                    <propertyFilter id="templateName" operation="EQUAL" property="templateName" operationEditable="false"/>
+                    <propertyFilter id="description" operation="EQUAL" property="description" operationEditable="false"/>
+                </configuration>
+            </configurations>
+        </filter>
+        <dataGrid id="poitlTemplatesTable"
+                  width="100%"
+                  dataContainer="poitlTemplatesDc">
+            <actions>
+                <action id="create" type="create"/>
+                <action id="edit" type="edit"/>
+                <action id="remove" type="remove"/>
+            </actions>
+            <columns>
+                <column property="templateName" id="templateName"/>
+                <column property="description" id="description"/>
+                <column property="category" id="category"/>
+                <column property="templateFile" id="templateFile"/>
+            </columns>
+            <simplePagination/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn" action="poitlTemplatesTable.create"/>
+                <button id="editBtn" action="poitlTemplatesTable.edit"/>
+                <button id="removeBtn" action="poitlTemplatesTable.remove"/>
+            </buttonsPanel>
+        </dataGrid>
+        <hbox id="lookupActions" spacing="true" visible="false">
+            <button action="lookupSelectAction"/>
+            <button action="lookupCancelAction"/>
+        </hbox>
+    </layout>
+</window>

@@ -1,6 +1,7 @@
 package com.x.print.domain.model.label;
 
 import com.x.print.domain.model.NamedEntity;
+import com.x.print.infrastructure.constants.LabelCategory;
 import com.x.print.infrastructure.constants.PrintStatus;
 import io.jmix.core.metamodel.annotation.JmixEntity;
 
@@ -24,6 +25,9 @@ public class Label extends NamedEntity {
     @Column(name = "LABEL_NAME")
     @NotNull
     private String labelName;
+
+    @Column(name = "CATEGORY")
+    private String category;
 
     @Column(name = "LABEL_DATA")
     @NotNull
@@ -63,6 +67,14 @@ public class Label extends NamedEntity {
 
     public void setLabelName(String labelName) {
         this.labelName = labelName;
+    }
+
+    public LabelCategory getCategory() {
+        return category != null ? LabelCategory.fromId(category) : null;
+    }
+
+    public void setCategory(LabelCategory category) {
+        this.category = category == null ? null : category.getId();
     }
 
     public String getLabelData() {

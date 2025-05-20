@@ -16,6 +16,11 @@ public class PrintRequest {
 
     private Integer labelQuantity;
 
+    /**
+     * 类型，用于区分模板类型，LABEL：java模板，POITL:word模板
+     */
+    private String category;
+
     public String getLabelIdentity() {
         return labelIdentity;
     }
@@ -54,5 +59,13 @@ public class PrintRequest {
 
     public void setLabelQuantity(Integer labelQuantity) {
         this.labelQuantity = labelQuantity;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
     }
 }

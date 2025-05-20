@@ -1,17 +1,32 @@
 package com.x.print.application;
 
 import com.alibaba.fastjson2.JSONObject;
+import com.deepoove.poi.XWPFTemplate;
+import com.jacob.activeX.ActiveXComponent;
+import com.jacob.com.Dispatch;
+import com.jacob.com.Variant;
 import com.x.print.domain.model.label.ILabelService;
 import com.x.print.domain.model.label.Label;
 import com.x.print.domain.model.labeldesign.ILabelDesignService;
 import com.x.print.domain.model.labeldesign.LabelDesign;
+import com.x.print.domain.model.poitltemplate.IPoitlTemplateService;
+import com.x.print.domain.model.poitltemplate.PoitlTemplate;
 import com.x.print.domain.model.printqueue.IPrintQueueService;
 import com.x.print.domain.model.printqueue.PrintQueue;
+import com.x.print.infrastructure.constants.LabelCategory;
 import com.x.print.infrastructure.constants.Orientation;
 import com.x.print.infrastructure.constants.PrintStatus;
+import io.jmix.core.FileRef;
+import io.jmix.core.FileStorage;
+import io.jmix.core.FileStorageLocator;
 import io.jmix.core.security.Authenticated;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.apache.pdfbox.Loader;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.printing.PDFPrintable;
+import org.apache.pdfbox.printing.Scaling;
+import org.apache.pdfbox.rendering.PDFRenderer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
@@ -23,12 +38,14 @@ import javax.print.PrintService;
 import javax.print.PrintServiceLookup;
 import javax.print.attribute.HashAttributeSet;
 import javax.print.attribute.standard.PrinterName;
-import java.awt.print.Book;
-import java.awt.print.PageFormat;
-import java.awt.print.Paper;
-import java.awt.print.PrinterJob;
-import java.util.ArrayList;
-import java.util.Date;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.awt.print.*;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.*;
 import java.util.List;
 
 /**
@@ -47,6 +64,13 @@ public class PrintWorker implements Runnable {
 
     @Autowired
     private ILabelDesignService labelDesignService;
+
+    @Autowired
+    private IPoitlTemplateService poitlTemplateService;
+
+    @Autowired
+    private FileStorageLocator fileStorageLocator;
+
     @Autowired
     private ILabelService labelService;
     protected boolean workerStatus = true;
@@ -84,53 +108,19 @@ public class PrintWorker implements Runnable {
                         List<PrintQueue> successPrintQueueList = new ArrayList<>();
                         for (PrintQueue printQueue : printQueueList) {
                             Label label = printQueue.getLabel();
-                            String labelName = label.getLabelName();//标签名称
-                            int labelQuantity = label.getLabelQuantity();//标签数量
 
-                            LabelDesign labelDesign = labelDesignService.loadLabelDesignByLabelName(labelName);
-                            if (labelDesign == null) {
-                                logger.error("[" + printerName + "]标签【" + labelName + "】不存在");
-                                throw new RuntimeException("[" + printerName + "]标签【" + labelName + "】不存在");
+                            LabelCategory labelCategory = label.getCategory();
+
+                            if(LabelCategory.LABEL.equals(labelCategory))
+                            {
+                                this.generateLabelBook(label, book);
+                            }else if(LabelCategory.POITL.equals(labelCategory)){
+                                this.generatePOITLBook(label, book);
+                            }else {
+                                //默认为Java模板标签
+                                this.generateLabelBook(label, book);
                             }
-
-                            String className = labelDesign.getClassName();
-
-                            int labelWidth = labelDesign.getWidth().intValue();
-                            int labelHeight = labelDesign.getHeight().intValue();
-
-                            logger.info("[" + printerName + "]getOrientation：" + labelDesign.getOrientation());
-
-                            PageFormat pageFormat = new PageFormat();
-                            if (Orientation.LANDSCAPE.equals(labelDesign.getOrientation())) {
-                                pageFormat.setOrientation(PageFormat.LANDSCAPE); //横向打印
-                            } else {
-                                pageFormat.setOrientation(PageFormat.PORTRAIT); //纵向打印
-                            }
-                            //通过Paper设置页面的空白边距和可打印区域。必须与实际打印纸张大小相符。
-                            Paper paper = new Paper();
-                            paper.setSize(labelWidth, labelHeight);//纸张大小
-
-                            //p.setImageableArea(0,0,284,340);//A4(595 X 842)设置打印区域，其实0，0应该是72，72，因为A4纸的默认X,Y边距是72
-                            paper.setImageableArea(0, 0, labelWidth, labelHeight);//A4(595 X 842)设置打印区域，其实0，0应该是72，72，因为A4纸的默认X,Y边距是72
-                            pageFormat.setPaper(paper);
-
-                            Class<?> cls = Class.forName(className);
-
-                            Object labelObject = cls.newInstance();//初始化一个实例
-                            LabelPrintable labelPrintableInstance = (LabelPrintable) labelObject;
-                            if (labelPrintableInstance == null) {
-                                logger.error("[" + printerName + "]实例化对象失败");
-                                throw new RuntimeException("[" + printerName + "]实例化对象失败");
-                            }
-                            labelPrintableInstance.setPrinterName(printerName);
-
-                            for (int i = 0; i < labelQuantity; i++) {
-                                String labelDataStr = label.getLabelData();
-                                JSONObject labelData = JSONObject.parseObject(labelDataStr);
-                                labelPrintableInstance.setLabelData(labelData);
-
-                                book.append(labelPrintableInstance, pageFormat);
-                            }
+                            //保存打印成功的标签
                             successPrintQueueList.add(printQueue);
                         }
                         if(book.getNumberOfPages() == 0)
@@ -150,7 +140,180 @@ public class PrintWorker implements Runnable {
             logger.error("[" + printerName + "]Run运行异常:", e);
         }
     }
+    /**
+     * 生产标签文档
+     */
+    private void generateLabelBook(Label label, Book book) throws ClassNotFoundException, InstantiationException, IllegalAccessException {
+        String labelName = label.getLabelName();//标签名称
+        int labelQuantity = label.getLabelQuantity();//标签数量
 
+        LabelDesign labelDesign = labelDesignService.loadLabelDesignByLabelName(labelName);
+        if (labelDesign == null) {
+            logger.error("[" + printerName + "]标签【" + labelName + "】不存在");
+            throw new RuntimeException("[" + printerName + "]标签【" + labelName + "】不存在");
+        }
+
+        String className = labelDesign.getClassName();
+
+        int labelWidth = labelDesign.getWidth().intValue();
+        int labelHeight = labelDesign.getHeight().intValue();
+
+        logger.info("[" + printerName + "]getOrientation：" + labelDesign.getOrientation());
+
+        PageFormat pageFormat = new PageFormat();
+        if (Orientation.LANDSCAPE.equals(labelDesign.getOrientation())) {
+            pageFormat.setOrientation(PageFormat.LANDSCAPE); //横向打印
+        } else {
+            pageFormat.setOrientation(PageFormat.PORTRAIT); //纵向打印
+        }
+        //通过Paper设置页面的空白边距和可打印区域。必须与实际打印纸张大小相符。
+        Paper paper = new Paper();
+        paper.setSize(labelWidth, labelHeight);//纸张大小
+
+        //p.setImageableArea(0,0,284,340);//A4(595 X 842)设置打印区域，其实0，0应该是72，72，因为A4纸的默认X,Y边距是72
+        paper.setImageableArea(0, 0, labelWidth, labelHeight);//A4(595 X 842)设置打印区域，其实0，0应该是72，72，因为A4纸的默认X,Y边距是72
+        pageFormat.setPaper(paper);
+
+        Class<?> cls = Class.forName(className);
+
+        Object labelObject = cls.newInstance();//初始化一个实例
+        LabelPrintable labelPrintableInstance = (LabelPrintable) labelObject;
+        if (labelPrintableInstance == null) {
+            logger.error("[" + printerName + "]实例化对象失败");
+            throw new RuntimeException("[" + printerName + "]实例化对象失败");
+        }
+        labelPrintableInstance.setPrinterName(printerName);
+
+        for (int i = 0; i < labelQuantity; i++) {
+            String labelDataStr = label.getLabelData();
+            JSONObject labelData = JSONObject.parseObject(labelDataStr);
+            labelPrintableInstance.setLabelData(labelData);
+
+            book.append(labelPrintableInstance, pageFormat);
+        }
+    }
+
+
+    /**
+     * 生成POITL标签文档
+     *
+     * @param label
+     * @param book
+     */
+    private void generatePOITLBook(Label label, Book book) throws IOException {
+        String labelName = label.getLabelName();//标签名称
+        int labelQuantity = label.getLabelQuantity();//标签数量
+
+        PoitlTemplate poitlTemplate = poitlTemplateService.loadPoitlTemplateByTemplateName(labelName);
+        if (poitlTemplate == null) {
+            logger.error("[" + printerName + "]POITL模板【" + labelName + "】不存在");
+            throw new RuntimeException("[" + printerName + "]POITL模板【" + labelName + "】不存在");
+        }
+
+        FileRef poitlTemplateFile = poitlTemplate.getTemplateFile();
+        // 获取文件存储
+        FileStorage fileStorage = fileStorageLocator.getDefault();
+
+        // 使用 Downloader 下载文件内容
+        InputStream inputStream = fileStorage.openStream(poitlTemplateFile);
+
+
+        // 1. 使用 POITL 生成 Word 文档
+        Map<String, Object> data = new HashMap<>();
+        data.put("title", "Hi, poi-tl Word模板引擎");
+        data.put("time", new Date());
+
+        XWPFTemplate template = XWPFTemplate.compile(inputStream).render(
+                data);
+        try (FileOutputStream out = new FileOutputStream("output.docx")) {
+            template.write(out);
+        }
+
+        // 2. 将 Word 文档转换为 PDF
+        this.wordToPDFWithJACOB();
+
+        //3. 将PDF转为Book
+        // 加载 PDF 文档
+        File pdfFile = new File("output.pdf");
+        PDDocument document = Loader.loadPDF(pdfFile);
+        System.out.println("PDF 加载成功，版本: " + document.getVersion());
+        // 创建 PDF 渲染器
+        PDFRenderer pdfRenderer = new PDFRenderer(document);
+
+        // 获取页面格式（默认 A4 大小）
+        PageFormat pageFormat = new PageFormat();
+
+        // 遍历 PDF 页面
+        for (int pageIndex = 0; pageIndex < document.getNumberOfPages(); pageIndex++) {
+            // 渲染页面为 BufferedImage
+            BufferedImage image = pdfRenderer.renderImageWithDPI(pageIndex, 300); // 300 DPI
+
+            // 创建 Printable 对象
+            Printable printable = new Printable() {
+                @Override
+                public int print(Graphics graphics, PageFormat pageFormat, int pageIndex) throws PrinterException {
+                    Graphics2D g2d = (Graphics2D) graphics;
+                    g2d.translate(pageFormat.getImageableX(), pageFormat.getImageableY());
+
+                    // 缩放图像以适应页面
+                    double scaleX = pageFormat.getImageableWidth() / image.getWidth();
+                    double scaleY = pageFormat.getImageableHeight() / image.getHeight();
+                    double scale = Math.min(scaleX, scaleY);
+                    g2d.scale(scale, scale);
+
+                    // 绘制图像
+                    g2d.drawImage(image, 0, 0, null);
+                    return PAGE_EXISTS;
+                }
+            };
+
+            // 将页面添加到 Book
+            book.append(printable, pageFormat);
+        }
+
+        // 关闭 PDF 文档
+        document.close();
+    }
+
+    private void wordToPDFWithJACOB()
+    {
+        // 初始化 COM 线程
+        com.jacob.com.ComThread.InitSTA();
+
+        try {
+            // 创建 Word 应用程序对象
+            ActiveXComponent wordApp = new ActiveXComponent("Word.Application");
+            wordApp.setProperty("Visible", new Variant(false)); // 设置 Word 不可见
+            Dispatch documents = wordApp.getProperty("Documents").toDispatch();
+
+            // 打开 Word 文档
+            String absoluteDocxPath = new File("output.docx").getAbsolutePath();
+            Dispatch document = Dispatch.call(documents, "Open", new Variant(absoluteDocxPath)).toDispatch();
+
+            // 保存为 PDF（17 表示 PDF 格式）
+            String outputPdf = new File("output.pdf").getAbsolutePath();
+            Dispatch.call(document, "SaveAs2", new Variant(outputPdf), new Variant(17));
+
+            // 关闭文档
+            Dispatch.call(document, "Close");
+            Dispatch.call(wordApp, "Quit");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            // 释放 COM 线程
+            com.jacob.com.ComThread.Release();
+        }
+
+        System.out.println("Word 文档已成功转换为 PDF！");
+    }
+
+    /**
+     * 打印文档
+     *
+     * @param printQueueList
+     * @param book
+     */
     private void printBook(List<PrintQueue> printQueueList, Book book)
     {
         //获取打印服务对象

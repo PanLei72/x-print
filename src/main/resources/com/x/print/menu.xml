@@ -7,6 +7,8 @@
         <item screen="LabelDataDefinition.browse"
               caption="msg://com.x.print.ui.screen.labeldatadefinition/labelDataDefinitionBrowse.menu" icon="DATABASE"/>
         <item screen="LabelDesign.browse" caption="msg://com.x.print.ui.screen.labeldesign/labelDesignBrowse.menu" icon="FILE_O"/>
+        <item screen="PoitlTemplate.browse"
+              caption="msg://com.x.print.ui.screen.poitltemplate/poitlTemplateBrowse.menu" icon="FILE_WORD_O"/>
     </menu>
 
     <menu id="printQuery" caption="msg://com.x.print/menu.printQuery" icon="SEARCH_PLUS">

@@ -4,6 +4,7 @@ import com.alibaba.fastjson2.JSONObject;
 import com.x.print.domain.model.label.ILabelService;
 import com.x.print.domain.model.label.Label;
 import com.x.print.domain.model.printqueue.IPrintQueueService;
+import com.x.print.infrastructure.constants.LabelCategory;
 import com.x.print.infrastructure.constants.PrintStatus;
 import org.apache.groovy.parser.antlr4.util.StringUtils;
 import org.apache.logging.log4j.LogManager;
@@ -48,6 +49,12 @@ public class PrintService {
             printResponse.setErrorMessage("打印机[printerName]不能为空");
             return printResponse;
         }
+        String category = printRequest.getCategory();
+        LabelCategory labelCategory = null;
+        if(!StringUtils.isEmpty(category)){
+            labelCategory = LabelCategory.valueOf(category);
+        }
+
         String labelData = printRequest.getLabelData();
         try {
             JSONObject.parseObject(labelData);
@@ -64,6 +71,7 @@ public class PrintService {
         Label label = labelService.createLabelHistory();
         label.setLabelIdentity(labelIdentity);
         label.setPrinterName(printerName);
+        label.setCategory(labelCategory);
         label.setLabelName(printRequest.getLabelName());
         label.setLabelData(printRequest.getLabelData());
         label.setLabelQuantity(printRequest.getLabelQuantity());
