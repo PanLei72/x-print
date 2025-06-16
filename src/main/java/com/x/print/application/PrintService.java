@@ -64,8 +64,8 @@ public class PrintService implements ApplicationRunner {
                                             PrintWorker printWorker = this.startListenPrint(printerName);
                                             printWorkerHashtable.put(printerName, printWorker);
                                         } catch (Exception e) {
-                                            logger.error("[" + printerName + "]异常" + e.getMessage());
-                                            logger.error("[" + printerName + "]异常", e);
+                                            logger.error("[{}]异常{}", printerName, e.getMessage());
+                                            logger.error("[{}]异常", printerName, e);
                                         }
                                         Thread.sleep(500);
                                     }
@@ -93,7 +93,7 @@ public class PrintService implements ApplicationRunner {
                                 return;
                             }
                         } catch (Exception e) {
-                            logger.error("[系统异常]轮询打印机，" + e.getMessage());
+                            logger.error("[系统异常]轮询打印机，{}", e.getMessage());
                             logger.error("[系统异常]轮询打印机，", e);
                             if (!refreshPrintWorker) {
                                 return;
@@ -118,7 +118,7 @@ public class PrintService implements ApplicationRunner {
                     // 将服务线程设定为用户线程
                     thread.setDaemon(false);
                     thread.start();
-                    logger.warn("[" + printerName + "]成功启动线程");
+                    logger.info("[{}]成功启动线程", printerName);
 
                     return printWorker;
                 }
@@ -126,7 +126,6 @@ public class PrintService implements ApplicationRunner {
             thread.setDaemon(false);
             thread.start();
         } catch (Exception e) {
-            logger.error("[系统异常]" + e.getMessage());
             logger.error("[系统异常]", e);
         }
     }

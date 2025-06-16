@@ -65,11 +65,7 @@ public class LabelDesignService implements ILabelDesignService {
         try {
             cls = Class.forName(labelDesign.getClassName());
             obj = cls.newInstance();//初始化标签实例
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        } catch (InstantiationException e) {
-            throw new RuntimeException(e);
-        } catch (IllegalAccessException e) {
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
             throw new RuntimeException(e);
         }
         LabelPrintable labelPrintable = (LabelPrintable) obj;

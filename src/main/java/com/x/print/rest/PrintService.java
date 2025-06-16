@@ -36,7 +36,7 @@ public class PrintService {
         }
         String labelIdentity = printRequest.getLabelIdentity();
         if (StringUtils.isEmpty(labelIdentity)) {
-            printResponse.setErrorMessage("标签名称[labelIdentity]不能为空");
+            printResponse.setErrorMessage("标签标识[labelIdentity]不能为空");
             return printResponse;
         }
         String labelName = printRequest.getLabelName();

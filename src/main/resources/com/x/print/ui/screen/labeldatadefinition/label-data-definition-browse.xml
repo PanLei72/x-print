@@ -31,8 +31,8 @@
                 caption="msg:///actions.Cancel"
                 icon="LOOKUP_CANCEL"/>
     </actions>
-    <dialogMode height="600"
-                width="800"/>
+    <dialogMode height="768"
+                width="1024"/>
     <layout expand="split" spacing="true">
         <filter id="filter"
                 dataLoader="labelDataDefinitionsDl">

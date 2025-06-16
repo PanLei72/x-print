@@ -37,19 +37,6 @@ public class LabelDesignEdit extends StandardEditor<LabelDesign> {
         labelTampleList.add(LabelTemplate1.class.getName());
         labelTampleList.add(LabelTemplate2.class.getName());
         labelTampleList.add(LabelTemplate3.class.getName());
-        labelTampleList.add(LabelTemplate4.class.getName());
-        labelTampleList.add(LabelTemplate5.class.getName());
-        labelTampleList.add(LabelTemplate6.class.getName());
-        labelTampleList.add(LabelTemplate7.class.getName());
-        labelTampleList.add(LabelTemplate8.class.getName());
-        labelTampleList.add(LabelTemplate9.class.getName());
-        labelTampleList.add(LabelTemplate10.class.getName());
-        labelTampleList.add(LabelTemplate11.class.getName());
-        labelTampleList.add(LabelTemplate12.class.getName());
-        labelTampleList.add(LabelTemplate13.class.getName());
-        labelTampleList.add(LabelTemplate14.class.getName());
-        labelTampleList.add(LabelTemplate15.class.getName());
-        labelTampleList.add(LabelTemplate16.class.getName());
 
         classNameField.setOptionsList(labelTampleList);
     }

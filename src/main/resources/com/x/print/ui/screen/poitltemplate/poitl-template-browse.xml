@@ -6,7 +6,9 @@
     <data readOnly="true">
         <collection id="poitlTemplatesDc"
                     class="com.x.print.domain.model.poitltemplate.PoitlTemplate">
-            <fetchPlan extends="_base"/>
+            <fetchPlan extends="_base">
+                <property name="labelDataDefinition" fetchPlan="_base"/>
+            </fetchPlan>
             <loader id="poitlTemplatesDl">
                 <query>
                     <![CDATA[select e from PoitlTemplate e]]>
@@ -30,8 +32,10 @@
             <properties include=".*"/>
             <configurations>
                 <configuration id="defaultFilter" default="true" name="msg:///defaultFilter.name">
-                    <propertyFilter id="templateName" operation="EQUAL" property="templateName" operationEditable="false"/>
-                    <propertyFilter id="description" operation="EQUAL" property="description" operationEditable="false"/>
+                    <propertyFilter id="templateName" operation="EQUAL" property="templateName"
+                                    operationEditable="false"/>
+                    <propertyFilter id="description" operation="EQUAL" property="description"
+                                    operationEditable="false"/>
                 </configuration>
             </configurations>
         </filter>
@@ -48,6 +52,7 @@
                 <column property="description" id="description"/>
                 <column property="category" id="category"/>
                 <column property="templateFile" id="templateFile"/>
+                <column property="labelDataDefinition" id="labelDataDefinition"/>
             </columns>
             <simplePagination/>
             <buttonsPanel id="buttonsPanel"

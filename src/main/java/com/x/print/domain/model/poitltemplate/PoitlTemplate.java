@@ -1,18 +1,19 @@
 package com.x.print.domain.model.poitltemplate;
 
 import com.x.print.domain.model.NamedEntity;
+import com.x.print.domain.model.labeldatadefinition.LabelDataDefinition;
 import io.jmix.core.FileRef;
 import io.jmix.core.metamodel.annotation.DependsOnProperties;
 import io.jmix.core.metamodel.annotation.InstanceName;
 import io.jmix.core.metamodel.annotation.JmixEntity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 @JmixEntity
-@Table(name = "POITL_TEMPLATE")
+@Table(name = "POITL_TEMPLATE", indexes = {
+        @Index(name = "IDX_POITL_TEMPLATE_LABEL_DATA_DEFINITION", columnList = "LABEL_DATA_DEFINITION_ID")
+})
 @Entity
 public class PoitlTemplate extends NamedEntity {
 
@@ -29,6 +30,18 @@ public class PoitlTemplate extends NamedEntity {
 
     @Column(name = "TEMPLATE_FILE", length = 1024)
     private FileRef templateFile;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "LABEL_DATA_DEFINITION_ID")
+    private LabelDataDefinition labelDataDefinition;
+
+    public LabelDataDefinition getLabelDataDefinition() {
+        return labelDataDefinition;
+    }
+
+    public void setLabelDataDefinition(LabelDataDefinition labelDataDefinition) {
+        this.labelDataDefinition = labelDataDefinition;
+    }
 
     public String getTemplateName() {
         return templateName;

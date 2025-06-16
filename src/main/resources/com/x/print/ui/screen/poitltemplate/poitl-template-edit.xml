@@ -5,7 +5,9 @@
     <data>
         <instance id="poitlTemplateDc"
                   class="com.x.print.domain.model.poitltemplate.PoitlTemplate">
-            <fetchPlan extends="_base"/>
+            <fetchPlan extends="_base">
+                <property name="labelDataDefinition" fetchPlan="_base"/>
+            </fetchPlan>
             <loader/>
         </instance>
     </data>
@@ -27,7 +29,14 @@
                 <textField id="templateNameField" property="templateName"/>
                 <textField id="descriptionField" property="description"/>
                 <textField id="categoryField" property="category"/>
-                <fileStorageUpload id="templateFileField" property="templateFile"  showClearButton="true" permittedExtensions = ".docx" accept="*.docx"/>
+                <fileStorageUpload id="templateFileField" property="templateFile" showClearButton="true"
+                                   permittedExtensions=".docx" accept="*.docx"/>
+                <entityPicker id="labelDataDefinitionField" property="labelDataDefinition">
+                    <actions>
+                        <action id="entityLookupAction" type="entity_lookup"/>
+                        <action id="entityClearAction" type="entity_clear"/>
+                    </actions>
+                </entityPicker>
             </column>
         </form>
         <hbox id="editActions" spacing="true">
