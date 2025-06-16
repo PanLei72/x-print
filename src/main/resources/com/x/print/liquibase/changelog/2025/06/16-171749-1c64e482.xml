@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.11.xsd"
+        objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
+    <changeSet id="1" author="print">
+        <createTable tableName="LABEL">
+            <column name="ID" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_LABEL"/>
+            </column>
+            <column name="VERSION" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="CREATED_BY" type="VARCHAR(255)"/>
+            <column name="CREATED_DATE" type="DATETIME"/>
+            <column name="LAST_MODIFIED_BY" type="VARCHAR(255)"/>
+            <column name="LAST_MODIFIED_DATE" type="DATETIME"/>
+            <column name="LABEL_IDENTITY" type="VARCHAR(255)"/>
+            <column name="PRINTER_NAME" type="VARCHAR(255)"/>
+            <column name="LABEL_NAME" type="VARCHAR(255)"/>
+            <column name="CATEGORY" type="VARCHAR(255)"/>
+            <column name="LABEL_DATA" type="VARCHAR(255)"/>
+            <column name="LABEL_QUANTITY" type="INT"/>
+            <column name="PRINT_STATUS" type="VARCHAR(255)"/>
+            <column name="PRINT_TIME" type="DATETIME"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="2" author="print">
+        <createTable tableName="LABEL_DATA_DEFINITION">
+            <column name="ID" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_LABEL_DATA_DEFINITION"/>
+            </column>
+            <column name="VERSION" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="CREATED_BY" type="VARCHAR(255)"/>
+            <column name="CREATED_DATE" type="DATETIME"/>
+            <column name="LAST_MODIFIED_BY" type="VARCHAR(255)"/>
+            <column name="LAST_MODIFIED_DATE" type="DATETIME"/>
+            <column name="LABEL_DATA_DEFINITION_NAME" type="VARCHAR(255)"/>
+            <column name="DESCRIPTION" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="3" author="print">
+        <createTable tableName="LABEL_DESIGN">
+            <column name="ID" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_LABEL_DESIGN"/>
+            </column>
+            <column name="VERSION" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="CREATED_BY" type="VARCHAR(255)"/>
+            <column name="CREATED_DATE" type="DATETIME"/>
+            <column name="LAST_MODIFIED_BY" type="VARCHAR(255)"/>
+            <column name="LAST_MODIFIED_DATE" type="DATETIME"/>
+            <column name="LABEL_NAME" type="VARCHAR(255)"/>
+            <column name="DESCRIPTION" type="VARCHAR(255)"/>
+            <column name="HEIGHT" type="DOUBLE"/>
+            <column name="WIDTH" type="DOUBLE"/>
+            <column name="CLASS_NAME" type="VARCHAR(255)"/>
+            <column name="ORIENTATION" type="INT"/>
+            <column name="LABEL_DATA_DEFINITION_ID" type="UUID"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="4" author="print">
+        <createTable tableName="LABEL_VARIABLE">
+            <column name="ID" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_LABEL_VARIABLE"/>
+            </column>
+            <column name="VERSION" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="CREATED_BY" type="VARCHAR(255)"/>
+            <column name="CREATED_DATE" type="DATETIME"/>
+            <column name="LAST_MODIFIED_BY" type="VARCHAR(255)"/>
+            <column name="LAST_MODIFIED_DATE" type="DATETIME"/>
+            <column name="LABEL_DATA_DEFINITION_ID" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="LABEL_VARIABLE_NAME" type="VARCHAR(255)"/>
+            <column name="DESCRIPTION" type="VARCHAR(255)"/>
+            <column name="DEFAULT_VALUE" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="5" author="print">
+        <createTable tableName="POITL_TEMPLATE">
+            <column name="ID" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_POITL_TEMPLATE"/>
+            </column>
+            <column name="VERSION" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="CREATED_BY" type="VARCHAR(255)"/>
+            <column name="CREATED_DATE" type="DATETIME"/>
+            <column name="LAST_MODIFIED_BY" type="VARCHAR(255)"/>
+            <column name="LAST_MODIFIED_DATE" type="DATETIME"/>
+            <column name="TEMPLATE_NAME" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="DESCRIPTION" type="VARCHAR(255)"/>
+            <column name="CATEGORY" type="VARCHAR(255)"/>
+            <column name="TEMPLATE_FILE" type="VARCHAR(1024)"/>
+            <column name="LABEL_DATA_DEFINITION_ID" type="UUID"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="6" author="print">
+        <createTable tableName="PRINT_QUEUE">
+            <column name="ID" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_PRINT_QUEUE"/>
+            </column>
+            <column name="VERSION" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="CREATED_BY" type="VARCHAR(255)"/>
+            <column name="CREATED_DATE" type="DATETIME"/>
+            <column name="LAST_MODIFIED_BY" type="VARCHAR(255)"/>
+            <column name="LAST_MODIFIED_DATE" type="DATETIME"/>
+            <column name="PRINTER_NAME" type="VARCHAR(255)"/>
+            <column name="SEQUENCE_NUMBER" type="BIGINT"/>
+            <column name="LABEL_ID" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="7" author="print">
+        <createIndex indexName="IDX_POITL_TEMPLATE_LABEL_DATA_DEFINITION" tableName="POITL_TEMPLATE">
+            <column name="LABEL_DATA_DEFINITION_ID"/>
+        </createIndex>
+
+        <addForeignKeyConstraint baseColumnNames="LABEL_DATA_DEFINITION_ID" baseTableName="POITL_TEMPLATE"
+                                 constraintName="FK_POITL_TEMPLATE_ON_LABEL_DATA_DEFINITION" referencedColumnNames="ID"
+                                 referencedTableName="LABEL_DATA_DEFINITION"/>
+    </changeSet>
+    <changeSet id="8" author="print">
+        <addForeignKeyConstraint baseColumnNames="LABEL_DATA_DEFINITION_ID" baseTableName="LABEL_DESIGN"
+                                 constraintName="FK_LABEL_DESIGN_ON_LABEL_DATA_DEFINITION" referencedColumnNames="ID"
+                                 referencedTableName="LABEL_DATA_DEFINITION"/>
+    </changeSet>
+    <changeSet id="9" author="print">
+        <addForeignKeyConstraint baseColumnNames="LABEL_DATA_DEFINITION_ID" baseTableName="LABEL_VARIABLE"
+                                 constraintName="FK_LABEL_VARIABLE_ON_LABEL_DATA_DEFINITION" referencedColumnNames="ID"
+                                 referencedTableName="LABEL_DATA_DEFINITION"/>
+    </changeSet>
+    <changeSet id="10" author="print">
+        <addForeignKeyConstraint baseColumnNames="LABEL_ID" baseTableName="PRINT_QUEUE"
+                                 constraintName="FK_PRINT_QUEUE_ON_LABEL" referencedColumnNames="ID"
+                                 referencedTableName="LABEL"/>
+    </changeSet>
+</databaseChangeLog>
