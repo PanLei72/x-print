@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://jmix.io/schema/ui/window"
+        caption="msg://homeScreen.caption">
+    <layout>
+        <vbox height="100%" width="100%">
+            <hbox id="titleHbox" height="100%" width="100%" box.expandRatio="1">
+                <label align="MIDDLE_LEFT"/>
+                <label id="welcomeLabel"
+                       align="MIDDLE_LEFT"
+                       css="font-size: 25px; font-weight:bold; color: #B7472A"
+                       value="msg://welcomeLabel"/>
+                <label align="MIDDLE_LEFT"/>
+                <label align="MIDDLE_LEFT"/>
+            </hbox>
+        </vbox>
+    </layout>
+</window>
