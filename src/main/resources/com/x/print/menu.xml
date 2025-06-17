@@ -13,7 +13,7 @@
 
     <menu id="printQuery" caption="msg://com.x.print/menu.printQuery" icon="SEARCH_PLUS">
         <item screen="PrintQueue.browse" caption="msg://com.x.print.ui.screen.printqueue/printQueueBrowse.menu" icon="SEARCH"/>
-        <item screen="Label.browse" caption="msg://com.x.print.ui.screen.label/labelBrowse.menu" icon="SEARCH"/>
+        <item screen="Label.browse" caption="msg://com.x.print.ui.screen.label/labelBrowse.menu" icon="HISTORY"/>
     </menu>
 
     <menu id="userData" caption="msg://com.x.print/menu.userManagement" icon="USERS">
