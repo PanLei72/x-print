@@ -18,6 +18,8 @@
 
     <menu id="userData" caption="msg://com.x.print/menu.userManagement" icon="USERS">
         <item screen="User.browse" caption="msg://com.x.print.ui.screen.user/UserBrowse.caption" icon="USER_MD"/>
+        <item id="sec_ResourceRoleModel.browse" screen="sec_ResourceRoleModel.browse" caption="msg://io.jmix.securityui/menu.sec_ResourceRoleModel.browse" icon="USERS"/>
+        <item id="sec_RowLevelRoleModel.browse" screen="sec_RowLevelRoleModel.browse" caption="msg://io.jmix.securityui/menu.sec_RowLevelRoleModel.browse" icon="LIST_UL"/>
     </menu>
 <!--    <item screen="themeSettingsScreen" caption="msg://io.jmix.ui.app.themesettings/themeSettings.caption" icon="MOON_O"/>-->
 
