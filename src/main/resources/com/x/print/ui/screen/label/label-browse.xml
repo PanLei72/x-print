@@ -39,6 +39,7 @@
                     <propertyFilter id="printerName" operation="EQUAL" property="printerName"
                                     operationEditable="false"/>
                     <propertyFilter id="labelName" operation="EQUAL" property="labelName" operationEditable="false"/>
+                    <propertyFilter id="category" operation="EQUAL" property="category" operationEditable="false"/>
                 </configuration>
             </configurations>
         </filter>
@@ -49,6 +50,7 @@
             </actions>
             <columns>
                 <column property="labelIdentity" id="labelIdentity"/>
+                <column property="category" id="category"/>
                 <column property="printerName" id="printerName"/>
                 <column property="labelName" id="labelName"/>
                 <column property="labelQuantity" id="labelQuantity"/>
