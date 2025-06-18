@@ -101,7 +101,9 @@
             </column>
             <column name="DESCRIPTION" type="VARCHAR(255)"/>
             <column name="CATEGORY" type="VARCHAR(255)"/>
-            <column name="TEMPLATE_FILE" type="VARCHAR(1024)"/>
+            <column name="TEMPLATE_FILE" type="VARCHAR(1024)">
+                <constraints nullable="false"/>
+            </column>
             <column name="LABEL_DATA_DEFINITION_ID" type="UUID"/>
         </createTable>
     </changeSet>

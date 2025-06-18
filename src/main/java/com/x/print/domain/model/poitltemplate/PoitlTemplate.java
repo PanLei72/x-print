@@ -28,7 +28,8 @@ public class PoitlTemplate extends NamedEntity {
     @Column(name = "CATEGORY")
     private String category;
 
-    @Column(name = "TEMPLATE_FILE", length = 1024)
+    @NotNull
+    @Column(name = "TEMPLATE_FILE", nullable = false, length = 1024)
     private FileRef templateFile;
 
     @ManyToOne(fetch = FetchType.LAZY)
