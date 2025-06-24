@@ -4,13 +4,12 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                       http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
-
-    <!-- DO NOT REMOVE. This is a master changelog that runs all other changelogs. -->
-
     <include file="/io/jmix/data/liquibase/changelog.xml"/>
     <include file="/io/jmix/uidata/liquibase/changelog.xml"/>
     <include file="/io/jmix/securitydata/liquibase/changelog.xml"/>
     <include file="/io/jmix/securityoauth2/liquibase/changelog.xml"/>
+
+    <!-- DO NOT REMOVE. This is a master changelog that runs all other changelogs. -->
 
     <includeAll path="/com/x/print/liquibase/changelog"/>
 
